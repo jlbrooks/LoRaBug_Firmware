@@ -46,43 +46,67 @@
 
 /* The starting address of the application.  Normally the interrupt vectors  */
 /* must be located at the beginning of the application.                      */
-#define FLASH_BASE              0x0
-#define FLASH_SIZE              0x20000
-#define RAM_BASE                0x20000000
-#define RAM_SIZE                0x5000
+#define FLASH_APP_BASE              0x0
+#define FLASH_LEN               0x20000
+#define FLASH_PAGE_LEN          0x1000
+/* Last page of Flash is allocated to App: 0x1F000 - 0x1FFFF */
+#define FLASH_LAST_PAGE_START   FLASH_LEN - FLASH_PAGE_LEN
+
+/* RAM starts at 0x20000000 and is 20KB */
+#define RAM_APP_BASE            0x20000000
+#define RAM_LEN                 0x5000
+/* RAM reserved by ROM code starts. */
+#define RAM_RESERVED_OFFSET      0x4F00
 
 /* System memory map */
 
 MEMORY
 {
-    /* Application stored in and executes from internal flash */
-    FLASH (RX) : origin = FLASH_BASE, length = FLASH_SIZE
+    #ifdef ICALL_STACK0_START
+        FLASH (RX) : origin = FLASH_APP_BASE, length = ICALL_STACK0_START - FLASH_APP_BASE
+    #else // default
+        FLASH (RX) : origin = FLASH_APP_BASE, length = FLASH_LEN - FLASH_PAGE_LEN
+    #endif
+
+    // CCFG Page, contains .ccfg code section and some application code.
+    FLASH_LAST_PAGE (RX) :  origin = FLASH_LAST_PAGE_START, length = FLASH_PAGE_LEN
+
     /* Application uses internal RAM for data */
-    SRAM (RWX) : origin = RAM_BASE, length = RAM_SIZE
+    /* RAM Size 16 KB */
+    #ifdef ICALL_RAM0_START
+        SRAM (RWX) : origin = RAM_APP_BASE, length = ICALL_RAM0_START - RAM_APP_BASE
+    #else //default
+        SRAM (RWX) : origin = RAM_APP_BASE, length = RAM_RESERVED_OFFSET
+    #endif
 }
 
 /* Section allocation in memory */
 
 SECTIONS
 {
-    .text           :   > FLASH
-    .const          :   > FLASH
-    .constdata      :   > FLASH
-    .rodata         :   > FLASH
-    .cinit          :   > FLASH
-    .pinit          :   > FLASH
-    .init_array     :   > FLASH
-    .emb_text       :   > FLASH
-    .ccfg           :   > FLASH (HIGH)
+	.intvecs        :   >  FLASH_APP_BASE
+    .text           :   >> FLASH | FLASH_LAST_PAGE
+    .const          :   >> FLASH | FLASH_LAST_PAGE
+    .constdata      :   >> FLASH | FLASH_LAST_PAGE
+    .rodata         :   >> FLASH | FLASH_LAST_PAGE
+    .cinit          :   >  FLASH | FLASH_LAST_PAGE
+    .pinit          :   >> FLASH | FLASH_LAST_PAGE
+    .init_array     :   >> FLASH | FLASH_LAST_PAGE
+    .emb_text       :   >> FLASH | FLASH_LAST_PAGE
+    .ccfg           :   >  FLASH_LAST_PAGE (HIGH)
 
-#ifdef __TI_COMPILER_VERSION__
-#if __TI_COMPILER_VERSION__ >= 15009000
-    .TI.ramfunc     : {} load=FLASH, run=SRAM, table(BINIT)
-#endif
-#endif
-    .data           :   > SRAM
-    .bss            :   > SRAM
-    .sysmem         :   > SRAM
-    .stack          :   > SRAM (HIGH)
-    .nonretenvar    :   > SRAM
+	GROUP > SRAM
+	{
+	    .data
+	    .bss
+		.vtable
+	    .vtable_ram
+	     vtable_ram
+	    .sysmem
+    	.nonretenvar
+	} LOAD_END(heapStart)
+
+	.stack          :   >  SRAM (HIGH) LOAD_START(heapEnd)
 }
+
+__STACK_TOP = __stack + __STACK_SIZE;

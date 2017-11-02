@@ -77,6 +77,17 @@ extern "C" {
 #define     GPIO_toggle(n)
 #define     GPIO_write(n,m)
 
+#define Board_TRNG                  CC2650DK_7ID_TRNG0
+
+/*!
+ *  @def    CC2650DK_7ID_TRNGName
+ *  @brief  Enum of TRNG names on the CC2650 dev board
+ */
+typedef enum CC2650DK_7ID_TRNGName {
+    CC2650DK_7ID_TRNG0 = 0,
+    CC2650DK_7ID_TRNGCOUNT
+} CC2650DK_7ID_TRNGName;
+
 #ifdef __cplusplus
 }
 #endif

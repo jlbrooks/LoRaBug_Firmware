@@ -749,3 +749,38 @@ void CC2650_LORABUG_initWatchdog(void)
 {
     Watchdog_init();
 }
+
+/*
+ *  ========================= TRNG begin ====================================
+ */
+/* Place into subsections to allow the TI linker to remove items properly */
+#if defined(__TI_COMPILER_VERSION__)
+#pragma DATA_SECTION(TRNGCC26XX_config, ".const:TRNGCC26XX_config")
+#pragma DATA_SECTION(TRNGCC26XXHWAttrs, ".const:TRNGCC26XXHWAttrs")
+#endif
+
+/* Include drivers */
+#include <TRNGCC26XX.h>
+
+/* TRNG objects */
+TRNGCC26XX_Object trngCC26XXObjects[CC2650DK_7ID_TRNGCOUNT];
+
+/* TRNG configuration structure, describing which pins are to be used */
+const TRNGCC26XX_HWAttrs TRNGCC26XXHWAttrs[CC2650DK_7ID_TRNGCOUNT] = {
+    {
+        .powerMngrId    = PowerCC26XX_PERIPH_TRNG,
+    }
+};
+
+/* TRNG configuration structure */
+const TRNGCC26XX_Config TRNGCC26XX_config[] = {
+    {
+         .object  = &trngCC26XXObjects[0],
+         .hwAttrs = &TRNGCC26XXHWAttrs[0]
+    },
+    {NULL, NULL}
+};
+
+/*
+ *  ========================= TRNG end ====================================
+ */

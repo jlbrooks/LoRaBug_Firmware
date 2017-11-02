@@ -16,6 +16,10 @@
 #include <ti/drivers/UART.h>
 // #include <ti/drivers/Watchdog.h>
 
+/* Header files required to enable instruction fetch cache */
+#include <inc/hw_memmap.h>
+#include <driverlib/vims.h>
+
 /* Board Header files */
 #include "Board_LoRaBUG.h"
 
@@ -29,10 +33,19 @@
 
 #include "LoRaMac.h"
 
+#include "icall.h"
+#include "peripheral.h"
+#include "simple_peripheral.h"
+
 #define TASKSTACKSIZE   2048
 
 Task_Struct task0Struct;
 Char task0Stack[TASKSTACKSIZE];
+
+#include "ble_user_config.h"
+
+// BLE user defined configuration
+bleUserCfg_t user0Cfg = BLE_USER_CFG;
 
 
 /*------------------------------------------------------------------------*/
@@ -824,6 +837,24 @@ int main(void)
 
     /* Open UART */
     setupuart();
+
+    /* BLE stuff */
+    // Enable iCache prefetching
+    VIMSConfigure(VIMS_BASE, TRUE, TRUE);
+
+    // Enable cache
+    VIMSModeSet(VIMS_BASE, VIMS_MODE_ENABLED);
+
+    /* Initialize ICall module */
+    ICall_init();
+
+    /* Start tasks of external images - Priority 5 */
+    ICall_createRemoteTasks();
+
+    /* Kick off profile - Priority 3 */
+    GAPRole_createTask();
+
+    SimpleBLEPeripheral_createTask();
 
     /* Start BIOS */
     BIOS_start();
