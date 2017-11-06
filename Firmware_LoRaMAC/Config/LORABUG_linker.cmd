@@ -58,6 +58,9 @@
 /* RAM reserved by ROM code starts. */
 #define RAM_RESERVED_OFFSET      0x4F00
 
+#define GPRAM_SIZE 0x2000
+#define GPRAM_BASE 0x11000000
+
 /* System memory map */
 
 MEMORY

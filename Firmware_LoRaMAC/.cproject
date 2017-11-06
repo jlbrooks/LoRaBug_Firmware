@@ -81,7 +81,7 @@
 									<listOptionValue builtIn="false" value="CC2650EM_7ID"/>
 									<listOptionValue builtIn="false" value="CC26XX"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_EXCLUDE_UART"/>
-									<listOptionValue builtIn="false" value="HEAPMGR_SIZE=0"/>
+									<listOptionValue builtIn="false" value="HEAPMGR_SIZE=1024"/>
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=6"/>
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=3"/>
 									<listOptionValue builtIn="false" value="POWER_SAVING"/>
@@ -92,9 +92,9 @@
 									<listOptionValue builtIn="false" value="MAX_NUM_BLE_CONNS=1 "/>
 									<listOptionValue builtIn="false" value="xdc_runtime_Assert_DISABLE_ALL"/>
 									<listOptionValue builtIn="false" value="xdc_runtime_Log_DISABLE_ALL"/>
-									<listOptionValue builtIn="false" value="ICALL_STACK0_START=0xe000"/>
-									<listOptionValue builtIn="false" value="ICALL_RAM0_START=0x20004368"/>
-									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR=0xe001"/>
+									<listOptionValue builtIn="false" value="ICALL_STACK0_START=0x1f000"/>
+									<listOptionValue builtIn="false" value="ICALL_RAM0_START=0x20004e00"/>
+									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR=0x1f001"/>
 									<listOptionValue builtIn="false" value="ccs"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.DIAG_WARNING.1996585546" name="Treat diagnostic &lt;id&gt; as warning (--diag_warning, -pdsw)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.DIAG_WARNING" valueType="stringList">
@@ -126,9 +126,9 @@
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DEFINE.2026846050" name="Pre-define preprocessor macro _name_ to _value_ (--define)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DEFINE" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="--define=ICALL_RAM0_START=0x20004368"/>
-									<listOptionValue builtIn="false" value="--define=ICALL_STACK0_START=0xe000"/>
-									<listOptionValue builtIn="false" value="--define=ICALL_STACK0_ADDR=0xe001"/>
+									<listOptionValue builtIn="false" value="ICALL_RAM0_START=0x20004e00"/>
+									<listOptionValue builtIn="false" value="ICALL_STACK0_START=0x1f000"/>
+									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR=0x1f001"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DIAG_WRAP.536359713" name="Wrap diagnostic messages (--diag_wrap)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DIAG_WRAP" value="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DIAG_WRAP.off" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DISPLAY_ERROR_NUMBER.1543872763" name="Emit diagnostic identifier numbers (--display_error_number)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.linkerID.DISPLAY_ERROR_NUMBER" value="true" valueType="boolean"/>
