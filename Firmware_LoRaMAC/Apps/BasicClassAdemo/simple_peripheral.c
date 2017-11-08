@@ -60,7 +60,7 @@
 #include "linkdb.h"
 #include "gapgattserver.h"
 #include "gattservapp.h"
-#include "devinfoservice.h"
+//#include "devinfoservice.h"
 #include "simple_gatt_profile.h"
 
 #if defined(FEATURE_OAD) || defined(IMAGE_INVALIDATE)
@@ -80,7 +80,7 @@
 #include "rcosc_calibration.h"
 #endif //USE_RCOSC
 
-#include <ti/mw/display/Display.h>
+//#include <ti/mw/display/Display.h>
 #include "board_key.h"
 
 #include "board.h"
@@ -171,7 +171,7 @@ typedef struct
  */
 
 // Display Interface
-Display_Handle dispHandle = NULL;
+//Display_Handle dispHandle = NULL;
 
 /*********************************************************************
  * LOCAL VARIABLES
@@ -420,7 +420,7 @@ static void SimpleBLEPeripheral_init(void)
   Util_constructClock(&periodicClock, SimpleBLEPeripheral_clockHandler,
                       SBP_PERIODIC_EVT_PERIOD, 0, false, SBP_PERIODIC_EVT);
 
-  dispHandle = Display_open(Display_Type_LCD, NULL);
+  //dispHandle = Display_open(Display_Type_LCD, NULL);
 
   // Setup the GAP
   GAP_SetParamValue(TGAP_CONN_PAUSE_PERIPHERAL, DEFAULT_CONN_PAUSE_PERIPHERAL);
@@ -495,7 +495,6 @@ static void SimpleBLEPeripheral_init(void)
    // Initialize GATT attributes
   GGS_AddService(GATT_ALL_SERVICES);           // GAP
   GATTServApp_AddService(GATT_ALL_SERVICES);   // GATT attributes
-  DevInfo_AddService();                        // Device Information Service
 
 #ifndef FEATURE_OAD_ONCHIP
   SimpleProfile_AddService(GATT_ALL_SERVICES); // Simple GATT Profile
@@ -553,12 +552,12 @@ static void SimpleBLEPeripheral_init(void)
 
 #if defined FEATURE_OAD
 #if defined (HAL_IMAGE_A)
-  Display_print0(dispHandle, 0, 0, "BLE Peripheral A");
+ // Display_print0(dispHandle, 0, 0, "BLE Peripheral A");
 #else
-  Display_print0(dispHandle, 0, 0, "BLE Peripheral B");
+  //Display_print0(dispHandle, 0, 0, "BLE Peripheral B");
 #endif // HAL_IMAGE_A
 #else
-  Display_print0(dispHandle, 0, 0, "BLE Peripheral");
+  //Display_print0(dispHandle, 0, 0, "BLE Peripheral");
 #endif // FEATURE_OAD
 }
 
@@ -747,12 +746,12 @@ static uint8_t SimpleBLEPeripheral_processGATTMsg(gattMsgEvent_t *pMsg)
     // The app is informed in case it wants to drop the connection.
 
     // Display the opcode of the message that caused the violation.
-    Display_print1(dispHandle, 5, 0, "FC Violated: %d", pMsg->msg.flowCtrlEvt.opcode);
+    //Display_print1(dispHandle, 5, 0, "FC Violated: %d", pMsg->msg.flowCtrlEvt.opcode);
   }
   else if (pMsg->method == ATT_MTU_UPDATED_EVENT)
   {
     // MTU size updated
-    Display_print1(dispHandle, 5, 0, "MTU Size: $d", pMsg->msg.mtuEvt.MTU);
+    //Display_print1(dispHandle, 5, 0, "MTU Size: $d", pMsg->msg.mtuEvt.MTU);
   }
 
   // Free message payload. Needed only for ATT Protocol messages
@@ -795,7 +794,7 @@ static void SimpleBLEPeripheral_sendAttRsp(void)
     else
     {
       // Continue retrying
-      Display_print1(dispHandle, 5, 0, "Rsp send retry: %d", rspTxRetry);
+      //Display_print1(dispHandle, 5, 0, "Rsp send retry: %d", rspTxRetry);
     }
   }
 }
@@ -817,14 +816,14 @@ static void SimpleBLEPeripheral_freeAttRsp(uint8_t status)
     // See if the response was sent out successfully
     if (status == SUCCESS)
     {
-      Display_print1(dispHandle, 5, 0, "Rsp sent retry: %d", rspTxRetry);
+      //Display_print1(dispHandle, 5, 0, "Rsp sent retry: %d", rspTxRetry);
     }
     else
     {
       // Free response payload
       GATT_bm_free(&pAttRsp->msg, pAttRsp->method);
 
-      Display_print1(dispHandle, 5, 0, "Rsp retry failed: %d", rspTxRetry);
+      //Display_print1(dispHandle, 5, 0, "Rsp retry failed: %d", rspTxRetry);
     }
 
     // Free response message
@@ -898,7 +897,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
     case GAPROLE_STARTED:
       {
         uint8_t ownAddress[B_ADDR_LEN];
-        uint8_t systemId[DEVINFO_SYSTEM_ID_LEN];
+        uint8_t systemId[8];
 
         GAPRole_GetParameter(GAPROLE_BD_ADDR, ownAddress);
 
@@ -916,16 +915,16 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
         systemId[6] = ownAddress[4];
         systemId[5] = ownAddress[3];
 
-        DevInfo_SetParameter(DEVINFO_SYSTEM_ID, DEVINFO_SYSTEM_ID_LEN, systemId);
+        //DevInfo_SetParameter(DEVINFO_SYSTEM_ID, DEVINFO_SYSTEM_ID_LEN, systemId);
 
         // Display device address
-        Display_print0(dispHandle, 1, 0, Util_convertBdAddr2Str(ownAddress));
-        Display_print0(dispHandle, 2, 0, "Initialized");
+        //Display_print0(dispHandle, 1, 0, Util_convertBdAddr2Str(ownAddress));
+        //Display_print0(dispHandle, 2, 0, "Initialized");
       }
       break;
 
     case GAPROLE_ADVERTISING:
-      Display_print0(dispHandle, 2, 0, "Advertising");
+     // Display_print0(dispHandle, 2, 0, "Advertising");
       break;
 
 #ifdef PLUS_BROADCASTER
@@ -969,8 +968,8 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
         // connection
         if ( linkDB_GetInfo( numActive - 1, &linkInfo ) == SUCCESS )
         {
-          Display_print1(dispHandle, 2, 0, "Num Conns: %d", (uint16_t)numActive);
-          Display_print0(dispHandle, 3, 0, Util_convertBdAddr2Str(linkInfo.addr));
+          //Display_print1(dispHandle, 2, 0, "Num Conns: %d", (uint16_t)numActive);
+          //Display_print0(dispHandle, 3, 0, Util_convertBdAddr2Str(linkInfo.addr));
         }
         else
         {
@@ -978,8 +977,8 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
 
           GAPRole_GetParameter(GAPROLE_CONN_BD_ADDR, peerAddress);
 
-          Display_print0(dispHandle, 2, 0, "Connected");
-          Display_print0(dispHandle, 3, 0, Util_convertBdAddr2Str(peerAddress));
+          //Display_print0(dispHandle, 2, 0, "Connected");
+          //Display_print0(dispHandle, 3, 0, Util_convertBdAddr2Str(peerAddress));
         }
 
         #ifdef PLUS_BROADCASTER
@@ -1007,26 +1006,26 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
       break;
 
     case GAPROLE_CONNECTED_ADV:
-      Display_print0(dispHandle, 2, 0, "Connected Advertising");
+      //Display_print0(dispHandle, 2, 0, "Connected Advertising");
       break;
 
     case GAPROLE_WAITING:
       Util_stopClock(&periodicClock);
       SimpleBLEPeripheral_freeAttRsp(bleNotConnected);
 
-      Display_print0(dispHandle, 2, 0, "Disconnected");
+      //Display_print0(dispHandle, 2, 0, "Disconnected");
 
       // Clear remaining lines
-      Display_clearLines(dispHandle, 3, 5);
+      //Display_clearLines(dispHandle, 3, 5);
       break;
 
     case GAPROLE_WAITING_AFTER_TIMEOUT:
       SimpleBLEPeripheral_freeAttRsp(bleNotConnected);
 
-      Display_print0(dispHandle, 2, 0, "Timed Out");
+      //Display_print0(dispHandle, 2, 0, "Timed Out");
 
       // Clear remaining lines
-      Display_clearLines(dispHandle, 3, 5);
+      //Display_clearLines(dispHandle, 3, 5);
 
       #ifdef PLUS_BROADCASTER
         // Reset flag for next connection.
@@ -1035,11 +1034,11 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
       break;
 
     case GAPROLE_ERROR:
-      Display_print0(dispHandle, 2, 0, "Error");
+      //Display_print0(dispHandle, 2, 0, "Error");
       break;
 
     default:
-      Display_clearLine(dispHandle, 2);
+      //Display_clearLine(dispHandle, 2);
       break;
   }
 
@@ -1084,13 +1083,13 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
     case SIMPLEPROFILE_CHAR1:
       SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, &newValue);
 
-      Display_print1(dispHandle, 4, 0, "Char 1: %d", (uint16_t)newValue);
+      //Display_print1(dispHandle, 4, 0, "Char 1: %d", (uint16_t)newValue);
       break;
 
     case SIMPLEPROFILE_CHAR3:
       SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &newValue);
 
-      Display_print1(dispHandle, 4, 0, "Char 3: %d", (uint16_t)newValue);
+      //Display_print1(dispHandle, 4, 0, "Char 3: %d", (uint16_t)newValue);
       break;
 
     default:

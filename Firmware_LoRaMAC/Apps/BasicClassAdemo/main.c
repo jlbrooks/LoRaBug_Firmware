@@ -205,7 +205,7 @@ static void PrepareTxFrame( uint8_t port )
     uint32_t batteryVoltage = 0;
     uint8_t	batteryLevel = 0;
 
-    printf("# PrepareTxFrame\n");
+    //printf("# PrepareTxFrame\n");
 
     switch( port )
     {
@@ -271,7 +271,7 @@ static bool SendFrame( void )
     McpsReq_t mcpsReq;
     LoRaMacTxInfo_t txInfo;
 
-    printf("# SendFrame\n");
+    //printf("# SendFrame\n");
 
     if( LoRaMacQueryTxPossible( AppDataSize, &txInfo ) != LORAMAC_STATUS_OK )
     {
@@ -314,7 +314,7 @@ static bool SendFrame( void )
  */
 static void OnTxNextPacketTimerEvent( void )
 {
-    printf("# OnTxNextPacketTimerEvent\n");
+    //printf("# OnTxNextPacketTimerEvent\n");
     MibRequestConfirm_t mibReq;
     LoRaMacStatus_t status;
 
@@ -377,7 +377,7 @@ static void OnLed4TimerEvent( void )
  */
 static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
 {
-    printf("# McpsConfirm\n");
+    //printf("# McpsConfirm\n");
     uartputs("# McpsConfirm\n");
     if( mcpsConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
     {
@@ -423,7 +423,7 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
  */
 static void McpsIndication( McpsIndication_t *mcpsIndication )
 {
-    printf("# McpsIndication\n");
+    //printf("# McpsIndication\n");
     if( mcpsIndication->Status != LORAMAC_EVENT_INFO_STATUS_OK )
     {
         return;
@@ -614,12 +614,12 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
  */
 static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
 {
-    printf("# MlmeConfirm\n");
+    //printf("# MlmeConfirm\n");
     switch( mlmeConfirm->MlmeRequest )
     {
         case MLME_JOIN:
         {
-            printf("# MlmeConfirm: Join\n");
+            //printf("# MlmeConfirm: Join\n");
             if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
             {
                 // Status is OK, node has joined the network
@@ -634,7 +634,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         }
         case MLME_LINK_CHECK:
         {
-            printf("# MlmeConfirm: Link Check\n");
+            //printf("# MlmeConfirm: Link Check\n");
             if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
             {
                 // Check DemodMargin
@@ -662,7 +662,7 @@ void maintask(UArg arg0, UArg arg1)
 
     BoardInitMcu( );
     BoardInitPeriph( );
-    printf("# Board initialized\n");
+    //printf("# Board initialized\n");
 
     DeviceState = DEVICE_STATE_INIT;
 
@@ -672,7 +672,7 @@ void maintask(UArg arg0, UArg arg1)
         {
             case DEVICE_STATE_INIT:
             {
-                printf("# DeviceState: DEVICE_STATE_INIT\n");
+                //printf("# DeviceState: DEVICE_STATE_INIT\n");
                 LoRaMacPrimitives.MacMcpsConfirm = McpsConfirm;
                 LoRaMacPrimitives.MacMcpsIndication = McpsIndication;
                 LoRaMacPrimitives.MacMlmeConfirm = MlmeConfirm;
@@ -703,7 +703,7 @@ void maintask(UArg arg0, UArg arg1)
             }
             case DEVICE_STATE_JOIN:
             {
-                printf("# DeviceState: DEVICE_STATE_JOIN\n");
+                //printf("# DeviceState: DEVICE_STATE_JOIN\n");
 #if( OVER_THE_AIR_ACTIVATION != 0 )
                 MlmeReq_t mlmeReq;
 
@@ -759,7 +759,7 @@ void maintask(UArg arg0, UArg arg1)
             }
             case DEVICE_STATE_SEND:
             {
-                printf("# DeviceState: DEVICE_STATE_SEND\n");
+                //printf("# DeviceState: DEVICE_STATE_SEND\n");
                 if( NextTx == true )
                 {
                     PrepareTxFrame( AppPort );
@@ -781,7 +781,7 @@ void maintask(UArg arg0, UArg arg1)
             }
             case DEVICE_STATE_CYCLE:
             {
-                printf("# DeviceState: DEVICE_STATE_CYCLE\n");
+                //printf("# DeviceState: DEVICE_STATE_CYCLE\n");
                 DeviceState = DEVICE_STATE_SLEEP;
 
                 // Schedule next packet transmission
