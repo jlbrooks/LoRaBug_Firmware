@@ -37,6 +37,10 @@
 #include "peripheral.h"
 #include "simple_peripheral.h"
 
+#include <Apps/BasicClassADemo/pb_decode.h>
+#include <Apps/BasicClassADemo/pb_encode.h>
+#include <Apps/BasicClassADemo/occulow.pb.h>
+
 #define TASKSTACKSIZE   2048
 
 Task_Struct task0Struct;
@@ -204,6 +208,10 @@ static void PrepareTxFrame( uint8_t port )
     static uint32_t counter = 0;
     uint32_t batteryVoltage = 0;
     uint8_t	batteryLevel = 0;
+    static CountMessage message = CountMessage_init_zero;
+    pb_ostream_t stream;
+    bool status;
+    size_t message_length;
 
     //printf("# PrepareTxFrame\n");
 
@@ -215,6 +223,16 @@ static void PrepareTxFrame( uint8_t port )
     	batteryLevel = BoardGetBatteryLevel();
 
     	memset(AppData, '\0', sizeof(AppData));
+
+    	stream = pb_ostream_from_buffer(AppData, sizeof(AppData));
+
+        message.count_in = 1;
+        message.count_out = 2;
+
+        status = pb_encode(&stream, CountMessage_fields, &message);
+        message_length = stream.bytes_written;
+
+        AppDataSize = message_length;
 
     	// Copy Counter
     	memcpy(AppData, &counter, sizeof(counter));
