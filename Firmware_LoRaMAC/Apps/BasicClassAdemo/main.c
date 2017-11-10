@@ -37,7 +37,7 @@
 #include "peripheral.h"
 #include "simple_peripheral.h"
 
-#define TASKSTACKSIZE   2048
+#define TASKSTACKSIZE   1024
 
 Task_Struct task0Struct;
 Char task0Stack[TASKSTACKSIZE];
