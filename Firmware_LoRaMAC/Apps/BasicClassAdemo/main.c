@@ -37,7 +37,7 @@
 #include "peripheral.h"
 #include "simple_peripheral.h"
 
-#define TASKSTACKSIZE   1024
+#define TASKSTACKSIZE   2048
 
 Task_Struct task0Struct;
 Char task0Stack[TASKSTACKSIZE];
@@ -843,7 +843,7 @@ int main(void)
     VIMSConfigure(VIMS_BASE, TRUE, TRUE);
 
     // Enable cache
-    VIMSModeSet(VIMS_BASE, VIMS_MODE_ENABLED);
+    VIMSModeSet(VIMS_BASE, VIMS_MODE_DISABLED);
 
     /* Initialize ICall module */
     ICall_init();

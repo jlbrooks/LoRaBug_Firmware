@@ -147,7 +147,7 @@
 
 
 #ifndef SBP_TASK_STACK_SIZE
-#define SBP_TASK_STACK_SIZE                   644
+#define SBP_TASK_STACK_SIZE                   1024
 #endif
 
 // Internal Events for RTOS application

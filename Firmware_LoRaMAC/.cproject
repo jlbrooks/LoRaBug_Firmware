@@ -81,7 +81,7 @@
 									<listOptionValue builtIn="false" value="CC2650EM_7ID"/>
 									<listOptionValue builtIn="false" value="CC26XX"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_EXCLUDE_UART"/>
-									<listOptionValue builtIn="false" value="HEAPMGR_SIZE=2048"/>
+									<listOptionValue builtIn="false" value="HEAPMGR_SIZE=3000"/>
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=6"/>
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=3"/>
 									<listOptionValue builtIn="false" value="POWER_SAVING"/>

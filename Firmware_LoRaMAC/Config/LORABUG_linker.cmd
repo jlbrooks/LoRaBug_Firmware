@@ -81,6 +81,8 @@ MEMORY
     #else //default
         SRAM (RWX) : origin = RAM_APP_BASE, length = RAM_RESERVED_OFFSET
     #endif
+
+    GPRAM (RWX) : origin = GPRAM_BASE, length=GPRAM_SIZE
 }
 
 /* Section allocation in memory */
@@ -98,16 +100,13 @@ SECTIONS
     .emb_text       :   >> FLASH | FLASH_LAST_PAGE
     .ccfg           :   >  FLASH_LAST_PAGE (HIGH)
 
-	GROUP > SRAM
-	{
-	    .data
-	    .bss
-		.vtable
-	    .vtable_ram
-	     vtable_ram
-	    .sysmem
-    	.nonretenvar
-	} LOAD_END(heapStart)
+    .data			: > SRAM | GPRAM
+    .bss			: > SRAM | GPRAM
+	.vtable			: > SRAM | GPRAM
+    .vtable_ram		: > SRAM | GPRAM
+     vtable_ram		: > SRAM | GPRAM
+    .sysmem			: > SRAM | GPRAM
+	.nonretenvar	: > SRAM | GPRAM
 
 	.stack          :   >  SRAM (HIGH) LOAD_START(heapEnd)
 }

@@ -94,4 +94,6 @@
 #define SET_CCFG_IEEE_BLE_1                             0xFFFFFFFF // Bits [63:32]
 #endif
 
+#define SET_CCFG_SIZE_AND_DIS_FLAGS_DIS_GPRAM        0x0        // Cache is disabled and GPRAM is available at 0x11000000-0x11001FFF
+
 #include <startup_files/ccfg.c>
